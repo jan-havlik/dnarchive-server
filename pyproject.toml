@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "dnarchive-server"
+version = "0.1.0"
+description = ""
+authors = ["Jan Havlik <jan.havlik@firma.seznam.cz>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.103.1"
+uvicorn = "^0.23.2"
+pymongo = "^4.5.0"
+pydantic-settings = "^2.0.3"
+pydantic = "^2.3.0"
+python-decouple = "^3.8"
+asyncache = "^0.3.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
