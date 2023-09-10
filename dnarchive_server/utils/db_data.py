@@ -69,3 +69,11 @@ def get_palindrome_finder(chromosome: ChromosomeName, start: int, end: int):
     )
 
     return result
+
+
+def get_chromosomes():
+
+    dbname = get_mongodb()
+    collection_name = dbname["meta"]
+
+    return collection_name.find({}, {"_id": 0})
