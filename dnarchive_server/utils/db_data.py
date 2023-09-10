@@ -40,7 +40,8 @@ def get_sequence_from_mongo(chromosome: ChromosomeName, start: int, end: int):
     collection_name = dbname[chromosome]
     logger.info("Getting DNA sequence from MongoDB [%s] %d - %d", chromosome, start, end)
 
-    return collection_name.find_one({"start": start, "end": end}, {"seq": 1, "_id": 0})["seq"]
+    result = collection_name.find({"start": {"$gte": start}, "end": {"$lte": end+30}}, {"_id": 0})
+    return [seq["seq"] for seq in result]
 
 
 def get_g4_hunter(chromosome: ChromosomeName, start: int, end: int):
