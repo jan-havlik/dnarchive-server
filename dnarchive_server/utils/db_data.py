@@ -51,7 +51,7 @@ def get_g4_hunter(chromosome: ChromosomeName, start: int, end: int):
     logger.info("Getting G4 analysis from MongoDB [%s] %d - %d", chromosome, start, end+30)
 
     result = collection_name.find(
-        {"POSITION": {"$gte": start, "$lte": end+30}},
+        {"position": {"$gte": start, "$lte": end+30}},
         {"_id": 0}
     )
 
@@ -65,7 +65,7 @@ def get_palindrome_finder(chromosome: ChromosomeName, start: int, end: int):
     logger.info("Getting Palindrome analysis from MongoDB [%s] %d - %d", chromosome, start, end+30)
 
     result = collection_name.find(
-        {"Position": {"$gte": start, "$lte": end+30}},
+        {"position": {"$gte": start, "$lte": end+30}},
         {"_id": 0}
     )
 
