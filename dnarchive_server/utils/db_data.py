@@ -22,16 +22,9 @@ def get_g4_hunter(chromosomes: list[ChromosomeName], start: int, end: int, g4_fi
     dbname = get_mongodb()
     result = []
 
-<<<<<<< Updated upstream
-    result = collection_name.find(
-        {"position": {"$gte": start, "$lte": end+30}},
-        {"_id": 0}
-    )
-=======
     for chr in chromosomes:
         collection_name = dbname[f"{chr}_g4"]
         logger.info("Getting G4 analysis from MongoDB [%s] %d - %d", chr, start, end+30)
->>>>>>> Stashed changes
 
         partial = collection_name.find(
             {"position": {"$gte": start, "$lte": end+30}, **g4_filter},
@@ -54,16 +47,9 @@ def get_palindrome_finder(chromosomes: list[ChromosomeName], start: int, end: in
     dbname = get_mongodb()
     result = []
 
-<<<<<<< Updated upstream
-    result = collection_name.find(
-        {"position": {"$gte": start, "$lte": end+30}},
-        {"_id": 0}
-    )
-=======
     for chr in chromosomes:
         collection_name = dbname[f"{chr}_palindrome"]
         logger.info("Getting Palindrome analysis from MongoDB [%s] %d - %d", chr, start, end+30)
->>>>>>> Stashed changes
 
         partial = collection_name.find(
             {"position": {"$gte": start, "$lte": end+30}, **palindrome_filter},
