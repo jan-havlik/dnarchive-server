@@ -63,8 +63,8 @@ async def get_analysis(
     }
     if g4_threshold:
         g4_filter.update({"$or": [
-            {"score": {"$lte": g4_threshold}},
-            {"score": {"$gte": -g4_threshold}}
+            {"score": {"$lte": abs(g4_threshold)}},
+            {"score": {"$gte": -abs(g4_threshold)}}
         ]})
     if g4_window:
         g4_filter.update({"length": {"$lte": g4_window}})
