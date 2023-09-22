@@ -7,9 +7,12 @@ from utils.connections import get_mongodb
 logger = logging.getLogger("dnarchive-logger")
 
 
-def get_sequence_from_mongo(chromosome: ChromosomeName, start: int, end: int):
+def get_sequence_from_mongo(chromosome: list[ChromosomeName], start: int, end: int):
     
     dbname = get_mongodb()
+
+    if chromosome:
+        chromosome = chromosome[0]  # FIXME, mb return for all chromosomes
     collection_name = dbname[chromosome]
     logger.info("Getting DNA sequence from MongoDB [%s] %d - %d", chromosome, start, end)
 
@@ -25,7 +28,6 @@ def get_g4_hunter(chromosomes: list[ChromosomeName], start: int, end: int, g4_fi
     for chr in chromosomes:
         collection_name = dbname[f"{chr}_g4"]
         logger.info("Getting G4 analysis from MongoDB [%s] %d - %d", chr, start, end+30)
-
         partial = collection_name.find(
             {"position": {"$gte": start, "$lte": end+30}, **g4_filter},
             {"_id": 0}

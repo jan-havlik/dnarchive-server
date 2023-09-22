@@ -29,7 +29,7 @@ async def root():
     }
 
 @app.get("/sequence/")
-async def get_sequence(chromosome: ChromosomeName = ChromosomeName.chr1, start: int = 0, end: int = 5000):
+async def get_sequence(chromosome: list[ChromosomeName] = Query([ChromosomeName.chr1]), start: int = 0, end: int = 5000):
     """
     Returns sequence for given part of a chromosome with analysis data.
     """
