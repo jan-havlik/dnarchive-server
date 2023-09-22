@@ -17,7 +17,7 @@ def get_sequence_from_mongo(chromosome: ChromosomeName, start: int, end: int):
     return [seq["seq"] for seq in result]
 
 
-def get_g4_hunter(chromosomes: list[ChromosomeName], start: int, end: int, g4_filter: dict = {}, sort_by: str = Sorting.position_asc.value):
+def get_g4_hunter(chromosomes: list[ChromosomeName], start: int, end: int, g4_filter: dict = {}, sort_by: str = Sorting.position_asc):
     
     dbname = get_mongodb()
     result = []
@@ -42,7 +42,7 @@ def get_g4_hunter(chromosomes: list[ChromosomeName], start: int, end: int, g4_fi
     return sorted(result, key=lambda x: x[sort_by_col], reverse=sort_by_dir)
 
 
-def get_palindrome_finder(chromosomes: list[ChromosomeName], start: int, end: int, palindrome_filter: dict = {}, sort_by: str = Sorting.position_asc.value):
+def get_palindrome_finder(chromosomes: list[ChromosomeName], start: int, end: int, palindrome_filter: dict = {}, sort_by: str = Sorting.position_asc):
     
     dbname = get_mongodb()
     result = []
