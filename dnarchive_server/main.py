@@ -7,7 +7,7 @@ from utils.enums import ChromosomeName, Sorting
 from utils.base_models import G4Model, ChromosomeListModel, StatsModel
 from utils.db_data import (
     get_sequence_from_mongo,
-    get_g4_hunter,
+    get_quadruplexes,
     get_chromosomes,
 )
 
@@ -29,17 +29,17 @@ async def root():
     }
 
 @app.get("/sequence/")
-async def get_sequence(chromosome: list[ChromosomeName] = Query([ChromosomeName.chr1]), start: int = 0, end: int = 5000):
+async def get_sequence(chromosome: ChromosomeName = Query(ChromosomeName.chr1), start: int = 0, end: int = 50000):
     """
     Returns sequence for given part of a chromosome with analysis data.
     """
 
     return {
         "sequence": get_sequence_from_mongo(chromosome, start, end),
-        "analysis": [g4 for g4 in get_g4_hunter(chromosome, start, end)]
+        "analysis": get_quadruplexes([chromosome], start, end)
     }
 
-@app.get("/analysis/", response_model=G4Model)
+@app.get("/analysis/", response_model=list[G4Model])
 async def get_analysis(
         chromosome: list[ChromosomeName] = Query([ChromosomeName.chr1]),
         start: int = Query(0),
@@ -55,15 +55,12 @@ async def get_analysis(
         "position": {"$gte": start, "$lte": end+30},
     }
     if g4_threshold:
-        g4_filter.update({"$or": [
-            {"score": {"$lte": abs(g4_threshold)}},
-            {"score": {"$gte": -abs(g4_threshold)}}
-        ]})
+        g4_filter.update({"threshold": {"$eq": g4_threshold}})
     if g4_window:
         g4_filter.update({"length": {"$lte": g4_window}})
 
 
-    return get_g4_hunter(chromosome, start, end, g4_filter, sort_by)
+    return get_quadruplexes(chromosome, start, end, g4_filter, sort_by)
 
 
 @app.get("/chromosomes/", response_model=ChromosomeListModel)

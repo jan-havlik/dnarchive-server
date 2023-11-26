@@ -8,12 +8,14 @@ class GCModel(BaseModel):
     skew: str
 
 class G4Model(BaseModel):
-    id: int
     position: int
     length: int
     score: float
+    abs_score: float
     sequence: str
     sub_score: str
+    threshold: float
+    chromosome: str
 
 class ChromosomeListModel(BaseModel):
     id: int
