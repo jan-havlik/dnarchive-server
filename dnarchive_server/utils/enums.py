@@ -28,13 +28,6 @@ class ChromosomeName(str, Enum):
     chrY = "chrY"
 
 
-class Analysis(str, Enum):
-    g4 = "g4"
-    palindrome = "palindrome"
-    rloop = "rloop"
-    all = "all"
-
-
 class Sorting(Enum):
     position_asc = "position,asc"
     position_desc = "position,desc"
