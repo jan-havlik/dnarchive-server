@@ -61,18 +61,17 @@ async def get_analysis(
     return get_quadruplexes(chromosome, start, end, g4_threshold, g4_filter, sort_by)
 
 
-@app.get("/chromosomes/", response_model=ChromosomeListModel)
+@app.get("/chromosomes/", response_model=list[ChromosomeListModel])
 async def get_chromosome():
     """
     Returns chromosome metadata from database for all chromosomes.
     """
+    return get_chromosomes(meta_only=True)
 
-    return [chr for chr in get_chromosomes(meta_only=True)]
-
-@app.get("/stats/", response_model=StatsModel)
+@app.get("/stats/", response_model=list[StatsModel])
 async def get_stats():
     """
     Returns overall G4 stats for T2T genome.
     """
 
-    return [chr for chr in get_chromosomes()]
+    return get_chromosomes()

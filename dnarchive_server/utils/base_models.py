@@ -1,11 +1,5 @@
-from typing import Any
-
 from pydantic import BaseModel
 
-
-class GCModel(BaseModel):
-    content: str
-    skew: str
 
 class G4Model(BaseModel):
     position: int
@@ -28,7 +22,7 @@ class ChromosomeListModel(BaseModel):
 class StatsModel(BaseModel):
     g4_frequency: dict[float, float]  # Frequency of Quadruplex occurence for given threshold
     g4_threshold_count: dict[float, int]  # Count of Quadruplex occurence for given threshold
-    gc: dict[GCModel, float]  # GC content for chromosome
+    gc: dict[str, float]  # GC content for chromosome
     id: int
     length: int
     name: str
