@@ -11,6 +11,10 @@ class G4Model(BaseModel):
     threshold: float
     chromosome: str
 
+class SequenceModel(BaseModel):
+    sequence: str
+    analysis: list[G4Model]
+
 class ChromosomeListModel(BaseModel):
     id: int
     length: int

@@ -26,14 +26,15 @@ def get_quadruplexes(chromosomes: list[ChromosomeName], start: int, end: int, th
 
     results = []
     for chromosome in chromosomes:
-        colname = f"analysis_{chromosome}_{threshold_base}_{threshold_decimal}"
+        colname = f"analysis_{chromosome.value}_{threshold_base}_{threshold_decimal}"
         collection_name = dbname[colname]
         logger.info("Getting G4 analysis from MongoDB [%s] %d - %d", colname, start, end+30)
         
-        results += list(collection_name.find(
+        partial = list(collection_name.find(
             {"position": {"$gte": start, "$lte": end+30}, **g4_filter},
             {"_id": 0}
         ))
+        results += list(map(lambda x: {**x, "chromosome": chromosome.value, "threshold": threshold}, partial))
 
     sort_by_col, sort_by_dir = sort_by.value.split(",")
     sort_by_dir = True if sort_by_dir == "desc" else False

@@ -1,10 +1,11 @@
 from logging.config import dictConfig
 
 from fastapi import FastAPI, Query
+from fastapi.responses import FileResponse
 
 from conf.log_conf import log_config
 from utils.enums import ChromosomeName, Sorting
-from utils.base_models import G4Model, ChromosomeListModel, StatsModel
+from utils.base_models import G4Model, ChromosomeListModel, StatsModel, SequenceModel
 from utils.db_data import (
     get_sequence_from_mongo,
     get_quadruplexes,
@@ -14,7 +15,7 @@ from utils.db_data import (
 dictConfig(log_config)
 app = FastAPI()
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 async def root():
     return {
         "version": "v1",
@@ -28,7 +29,13 @@ async def root():
         ]
     }
 
-@app.get("/sequence/")
+
+@app.get('/favicon.ico', include_in_schema=False)
+async def favicon():
+    return FileResponse('favicon.ico')
+
+
+@app.get("/sequence/", response_model=SequenceModel)
 async def get_sequence(chromosome: ChromosomeName = Query(ChromosomeName.chr1), start: int = 0, end: int = 50000):
     """
     Returns sequence for given part of a chromosome with analysis data.
