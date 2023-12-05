@@ -15,6 +15,11 @@ class SequenceModel(BaseModel):
     sequence: str
     analysis: list[G4Model]
 
+class GeneModel(BaseModel):
+    name: str
+    start: int
+    end: int
+
 class ChromosomeListModel(BaseModel):
     id: int
     length: int

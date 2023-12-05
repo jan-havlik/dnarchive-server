@@ -5,11 +5,18 @@ from fastapi.responses import FileResponse
 
 from conf.log_conf import log_config
 from utils.enums import ChromosomeName, Sorting
-from utils.base_models import G4Model, ChromosomeListModel, StatsModel, SequenceModel
+from utils.base_models import (
+    G4Model,
+    ChromosomeListModel,
+    StatsModel,
+    SequenceModel,
+    GeneModel
+)
 from utils.db_data import (
     get_sequence_from_mongo,
     get_quadruplexes,
     get_chromosomes,
+    get_genes_from_db,
 )
 
 dictConfig(log_config)
@@ -25,14 +32,15 @@ async def root():
             { "url": "/sequence", "description": "Returns DNA sequence for given part of a chromosome." },
             { "url": "/analysis", "description": "Returns analysis data for given range in sequence (G4 Hunter, Palindrome Analyser)." },
             { "url": "/chromosomes", "description": "Returns all chromosome metadata." },
-            { "url": "/stats", "description": "Returns stats for all chromosomes in T2T." }
+            { "url": "/stats", "description": "Returns stats for all chromosomes in T2T." },
+            { "url": "/genes", "description": "Gene list with their positions." }
         ]
     }
 
 
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
-    return FileResponse('favicon.ico')
+    return FileResponse('favicon-32x32.png')
 
 
 @app.get("/sequence/", response_model=SequenceModel)
@@ -82,3 +90,10 @@ async def get_stats():
     """
 
     return get_chromosomes()
+
+@app.get("/genes/", response_model=list[GeneModel])
+async def get_genes():
+    """
+    Returns genes with their positions for analysis filtering.
+    """
+    return get_genes_from_db()
