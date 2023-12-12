@@ -56,7 +56,7 @@ async def get_sequence(chromosome: ChromosomeName = Query(ChromosomeName.chr1), 
 
 @app.get("/analysis/", response_model=G4Model)
 async def get_analysis(
-        chromosome: list[ChromosomeName] = Query([ChromosomeName.chr1]),
+        chromosomes: str = Query(",".join(ChromosomeName), alias="chromosome"),
         start: int = Query(0),
         end: int = Query(50000),
         g4_threshold: float = Query(1.2, alias="threshold"),
@@ -72,7 +72,9 @@ async def get_analysis(
     if g4_window:
         g4_filter.update({"length": {"$lte": g4_window}})
 
-    quadruplexes = get_quadruplexes(chromosome, start, end, g4_threshold, g4_filter, sort_by)
+    chromosomes = chromosomes.split(',') if "," in chromosomes else [chromosomes]
+
+    quadruplexes = get_quadruplexes(chromosomes, start, end, g4_threshold, g4_filter, sort_by)
     result = {
         "settings": {
             "total": len(quadruplexes),
