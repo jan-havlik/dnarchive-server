@@ -40,7 +40,7 @@ async def root():
 
 @app.get('/favicon.ico', include_in_schema=False)
 async def favicon():
-    return FileResponse('favicon-32x32.png')
+    return FileResponse('../favicon-32x32.png')
 
 
 @app.get("/sequence/", response_model=SequenceModel)
@@ -54,13 +54,13 @@ async def get_sequence(chromosome: ChromosomeName = Query(ChromosomeName.chr1), 
         "analysis": get_quadruplexes([chromosome], start, end, 1.2)
     }
 
-@app.get("/analysis/", response_model=list[G4Model])
+@app.get("/analysis/", response_model=G4Model)
 async def get_analysis(
         chromosome: list[ChromosomeName] = Query([ChromosomeName.chr1]),
         start: int = Query(0),
         end: int = Query(50000),
-        g4_threshold: float = Query(1.2, alias="g4-threshold"),
-        g4_window: int = Query(None, alias="g4-window"),
+        g4_threshold: float = Query(1.2, alias="threshold"),
+        g4_window: int = Query(None, alias="window"),
         sort_by: Sorting = Query(Sorting.position_asc),
     ):
     """
@@ -72,8 +72,18 @@ async def get_analysis(
     if g4_window:
         g4_filter.update({"length": {"$lte": g4_window}})
 
+    quadruplexes = get_quadruplexes(chromosome, start, end, g4_threshold, g4_filter, sort_by)
+    result = {
+        "settings": {
+            "total": len(quadruplexes),
+            "freq_per_1k": len(quadruplexes) / (end - start) * 1000,
+            "window_size": g4_window,
+            "threshold": g4_threshold
+        },
+        "result": quadruplexes
+    }
 
-    return get_quadruplexes(chromosome, start, end, g4_threshold, g4_filter, sort_by)
+    return result
 
 
 @app.get("/chromosomes/", response_model=list[ChromosomeListModel])
@@ -92,8 +102,8 @@ async def get_stats():
     return get_chromosomes()
 
 @app.get("/genes/", response_model=list[GeneModel])
-async def get_genes():
+async def get_genes(name: str = None):
     """
     Returns genes with their positions for analysis filtering.
     """
-    return get_genes_from_db()
+    return get_genes_from_db(name)

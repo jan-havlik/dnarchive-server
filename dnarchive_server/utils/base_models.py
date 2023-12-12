@@ -1,7 +1,13 @@
 from pydantic import BaseModel
 
 
-class G4Model(BaseModel):
+class SettingsModel(BaseModel):
+    total: int
+    freq_per_1k: float
+    window_size: int
+    threshold: float
+
+class AnalysisModel(BaseModel):
     position: int
     length: int
     score: float
@@ -11,6 +17,10 @@ class G4Model(BaseModel):
     threshold: float
     chromosome: str
 
+class G4Model(BaseModel):
+    result: list[AnalysisModel]
+    settings: SettingsModel
+
 class SequenceModel(BaseModel):
     sequence: str
     analysis: list[G4Model]
@@ -19,6 +29,7 @@ class GeneModel(BaseModel):
     name: str
     start: int
     end: int
+    chromosome: str
 
 class ChromosomeListModel(BaseModel):
     id: int
