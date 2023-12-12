@@ -58,9 +58,10 @@ def get_chromosomes(meta_only: bool = False):
         chromosome["g4_count"] = sum(chromosome.pop("g4_threshold_count").values())
     return result
 
-def get_genes_from_db():
+def get_genes_from_db(name: str = None):
 
     dbname = get_mongodb()
     collection_name = dbname["genes"]
 
-    return list(collection_name.find({}, {"_id": 0}))
+    filter = {} if not name else {"name": {"$eq": name.upper()}}
+    return list(collection_name.find(filter, {"_id": 0} ))
