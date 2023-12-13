@@ -23,7 +23,7 @@ class G4Model(BaseModel):
 
 class SequenceModel(BaseModel):
     sequence: str
-    analysis: list[G4Model]
+    analysis: list[AnalysisModel]
 
 class GeneModel(BaseModel):
     name: str

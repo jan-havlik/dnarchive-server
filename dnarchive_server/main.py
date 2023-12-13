@@ -51,7 +51,7 @@ async def get_sequence(chromosome: ChromosomeName = Query(ChromosomeName.chr1), 
 
     return {
         "sequence": get_sequence_from_mongo(chromosome, start, end),
-        "analysis": get_quadruplexes([chromosome], start, end, 1.2)
+        "analysis": get_quadruplexes([chromosome.value], start, end, 1.2)
     }
 
 @app.get("/analysis/", response_model=G4Model)
